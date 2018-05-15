@@ -1,0 +1,75 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*; // step 1
+import java.text.DecimalFormat;
+/** Year 13 Chapter 4 Java Task 10
+ *miles to kilometres converter  
+ */
+public class Converter extends JPanel{
+    
+    private JTextField milesField; 
+    private JButton submitButton;
+    private JButton clearButton;
+    private JLabel prompt;
+    private JLabel conversionOutput;
+    private double kilometres;
+    private JPanel top = new JPanel();
+    private JPanel middle = new JPanel();
+    private JPanel lower = new JPanel();
+    
+    public Converter(){
+        EventListener listener = new EventListener(); // step 3
+        conversionOutput = new JLabel("");
+        milesField = new JTextField("",5); 
+        prompt = new JLabel("Enter the number of miles"); 
+        submitButton = new JButton("submit");
+        submitButton.addActionListener(listener); // step 4
+        clearButton = new JButton("clear");
+        clearButton.addActionListener(listener); // step 4
+        top.setPreferredSize(new Dimension(300,50));
+        
+        middle.setPreferredSize(new Dimension(300,50));
+        lower.setPreferredSize(new Dimension(300,50));
+        top.setBackground(Color.pink);
+        middle.setBackground(Color.pink);
+        lower.setBackground(Color.pink);
+        top.add(prompt); 
+        top.add(milesField);
+        middle.add(submitButton);
+        middle.add(clearButton);
+        lower.add(conversionOutput);
+        add(top);
+        add(middle);
+        add(lower);
+        //set up outer panel colour and size
+        setPreferredSize(new Dimension(300,150));
+        setBackground(Color.pink);          
+    }
+    // step 2 write an inner class
+    private class EventListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            DecimalFormat df = new DecimalFormat("0.##");
+            if (e.getSource() == submitButton){
+                double miles = 0;
+                try{
+                    miles = Double.parseDouble(milesField.getText());
+                } catch(NumberFormatException x){
+                    System.out.println("Not a number");
+                }
+                kilometres = miles * 1.609344;
+                conversionOutput.setText( df.format(miles) + " miles is " + df.format(kilometres) + " kilometres");
+                
+            } else if (e.getSource() == clearButton){
+                milesField.setText("");
+                conversionOutput.setText("");
+            }
+        }
+    }
+    public static void main(String[]args){
+        JFrame window = new JFrame("Converter");
+        window.getContentPane().add(new Converter());
+        window.setVisible(true);  
+        window.pack(); 
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
